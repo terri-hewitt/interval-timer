@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Timers;
 using System.Media;
+using System.Speech.Synthesis;
 
 namespace IntervalTimer
 {
@@ -19,6 +20,8 @@ namespace IntervalTimer
         private int setsRemaining;
         private int exerciseNum;
         private int transitionTime;
+        private ExerciseRepModel nextExercise;
+        private SpeechSynthesizer textReader;
 
         private const int COUNTDOWN = 3;
         private System.Windows.Forms.Timer timer;
@@ -32,6 +35,7 @@ namespace IntervalTimer
 
             btnResume.Enabled = false;
             btnPause.Enabled = false;
+            textReader = new SpeechSynthesizer();
         }
 
         private void InitializeTimer()
@@ -57,7 +61,6 @@ namespace IntervalTimer
                 isRest = false;
                 setsRemaining = Settings.Instance.getNumSets();
                 timeLeft = COUNTDOWN;   // Initial countdown
-                Console.WriteLine("Sets remaining: " + setsRemaining.ToString());
                 activity.Text = "Get Ready!";
                 this.timer.Enabled = true;
                 timer.Start();  // Start the interval timer
@@ -82,54 +85,79 @@ namespace IntervalTimer
             {
                 timeLabel.Text = timeLeft + " seconds";
                 timeLeft--;
-                if (timeLeft <= 3 && !isRest)
+                /*if (timeLeft <= 2 && !isRest)
                 {
                     timer.Stop();  
                     Console.Beep(1000, 80);
                     timer.Start();
-                }
+                }*/
             }
-            else
+            else  // Timer ran out
             {
                 timeLabel.Text = "";
                 timer.Stop();
                 //SystemSounds.Beep.Play();
                 Console.Beep(1000, 80);
-                if (isRest)        // Rest timer
+
+
+                // If ending transition phase or set rest
+               /* if (isRest)
+                {
+                    exerciseNum++;      // Go to next exercise
+                }*/
+                if (exerciseNum >= Settings.Instance.getNumExercises()) // Finished a set of exercises
                 {
                     activity.Text = "Rest";
+                    textReader.SpeakAsync(activity.Text);
                     isRest = false;
-                    exerciseNum++;      // Go to next exercise
-                    if (exerciseNum >= Settings.Instance.getNumExercises()) // Finished a set of exercises
+
+                    timeLeft = Settings.Instance.getSetRestTime();
+                    exerciseNum = 0;    // Reset exercises to beginning
+                    setsRemaining--;    // Decrement number of sets left
+                    if (setsRemaining == 0)     // If finished sets, done. Stop the workout
                     {
-                        timeLeft = Settings.Instance.getSetRestTime();
-                        exerciseNum = 0;    // Reset exercises to beginning
-                        setsRemaining--;    // Decrement number of sets left
-                        if (setsRemaining == 0)     // No sets remaining, stop the workout
-                        {
-                            timeLabel.Text = "Finished!";
-                            activity.Text = "";
-                            timer.Stop();
-                            startButton.Enabled = true;    // Disable start button
-                            return;
-                        }
+                        timeLabel.Text = "Finished!";
+                        activity.Text = "";
+                        timer.Stop();
+                        startButton.Enabled = true;    // Disable start button
+                        return;
                     }
+                }
+                // Else
+                else
+                {
+                    // If transition time is set and we are transitioning between reps
+                    if (isRest && transitionTime > 0)
+                    {
+                        // set transition rest
+                        nextExercise = Settings.Instance.getExercise(exerciseNum);
+                        activity.Text = "Up Next: " + nextExercise.ExerciseName;
+                        textReader.SpeakAsync(activity.Text);
+                        isRest = false;
+
+                        timeLeft = transitionTime;
+                    }
+                    // Else start next exercise
                     else
                     {
-                        timeLeft = Settings.Instance.getTransitionTime();
+                        nextExercise = Settings.Instance.getExercise(exerciseNum);
+                        activity.Text = nextExercise.ExerciseName;
+                        textReader.SpeakAsync(activity.Text);
+                        exerciseNum++;      // Go to next exercise
+
+                        if (transitionTime > 0)
+                        {
+                            isRest = true;
+                        }
+
+                        timeLeft = nextExercise.Duration;
                     }
-                    timer.Start();
                 }
-                else               // Workout timer
-                {
-                    ExerciseRepModel nextExercise = Settings.Instance.getExercise(exerciseNum);
-                    activity.Text = nextExercise.ExerciseName;
-                    isRest = true;
-                    timeLeft = nextExercise.Duration;
-                    timer.Start();
-                }
+
+                timer.Start();
+
             }
-            Console.WriteLine("Remaining: " + setsRemaining.ToString());
+           // Console.WriteLine("Remaining: " + setsRemaining.ToString());
         }
 
         private void btnPause_Click(object sender, EventArgs e)

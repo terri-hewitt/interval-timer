@@ -24,26 +24,37 @@ namespace IntervalTimer
 
             exercises = ExerciseDataAccess.LoadExercises();
 
+            AutoCompleteStringCollection data = new AutoCompleteStringCollection();
+
             foreach(ExerciseModel item in exercises)
             {
-                exerciseComboList.Add(new ComboItem { Id = item.Id, Text = item.ExerciseName });
+                data.Add(item.ExerciseName);
             }
 
-            comboBox_selectExercise.DataSource = exerciseComboList;
-            comboBox_selectExercise.SelectedIndex = -1; // Clear combo box
+            textBox_exerciseDescription.AutoCompleteCustomSource = data;
+            
 
         }
 
         private void btnAddExercise_Click(object sender, EventArgs e)
         {
-            ComboItem comboItem = (ComboItem)comboBox_selectExercise.SelectedItem;
+           /* ComboItem comboItem = (ComboItem)comboBox_selectExercise.SelectedItem;
             if (comboItem.Text != "" && nudExerciseTime.Value > 0)
             {
                 string[] row = { comboItem.Text, nudExerciseTime.Value.ToString() };
                 ListViewItem exerciseItem = new ListViewItem(row);
                 lvWorkout.Items.Add(exerciseItem);                                             
             }
-            comboBox_selectExercise.SelectedIndex = -1;
+            comboBox_selectExercise.SelectedIndex = -1;*/
+
+            if (textBox_exerciseDescription.Text != "" && nudExerciseTime.Value > 0)
+            {
+                string[] row = { textBox_exerciseDescription.Text, nudExerciseTime.Value.ToString() };
+                ListViewItem exerciseItem = new ListViewItem(row);
+                lvWorkout.Items.Add(exerciseItem);
+                textBox_exerciseDescription.Text = "";  // Clear input box
+            }
+
         }
 
         private void btnSaveWorkout_Click(object sender, EventArgs e)
@@ -130,6 +141,18 @@ namespace IntervalTimer
 
             Settings.Instance.setExercises(exercises);
             lvWorkout.Items.Clear();
+        }
+
+        private void comboBox_selectExercise_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // TODO: Bind this to refresh list if database changes
+            exercises = ExerciseDataAccess.LoadExercises();
+
+            exerciseComboList.Clear();
+            foreach (ExerciseModel item in exercises)
+            {
+                exerciseComboList.Add(new ComboItem { Id = item.Id, Text = item.ExerciseName });
+            }
         }
 
         /* private void exercisesBindingNavigatorSaveItem_Click(object sender, EventArgs e)

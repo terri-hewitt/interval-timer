@@ -39,7 +39,6 @@ namespace IntervalTimer
             this.colExercise = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDuration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBox_selectExercise = new System.Windows.Forms.ComboBox();
             this.nud_restBetweenSets = new System.Windows.Forms.NumericUpDown();
             this.nud_transitionBetweenReps = new System.Windows.Forms.NumericUpDown();
             this.nud_numSets = new System.Windows.Forms.NumericUpDown();
@@ -48,6 +47,7 @@ namespace IntervalTimer
             this.label_numSets = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_clearAll = new System.Windows.Forms.Button();
+            this.textBox_exerciseDescription = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudExerciseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_restBetweenSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_transitionBetweenReps)).BeginInit();
@@ -123,21 +123,10 @@ namespace IntervalTimer
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(48, 127);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(94, 13);
+            this.label3.Size = new System.Drawing.Size(76, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Select an exercise";
-            // 
-            // comboBox_selectExercise
-            // 
-            this.comboBox_selectExercise.AllowDrop = true;
-            this.comboBox_selectExercise.DisplayMember = "Text";
-            this.comboBox_selectExercise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_selectExercise.FormattingEnabled = true;
-            this.comboBox_selectExercise.Location = new System.Drawing.Point(51, 154);
-            this.comboBox_selectExercise.Name = "comboBox_selectExercise";
-            this.comboBox_selectExercise.Size = new System.Drawing.Size(303, 21);
-            this.comboBox_selectExercise.TabIndex = 9;
-            this.comboBox_selectExercise.ValueMember = "Id";
+            this.label3.Text = "Exercise name";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // nud_restBetweenSets
             // 
@@ -237,14 +226,23 @@ namespace IntervalTimer
             this.btn_clearAll.UseVisualStyleBackColor = false;
             this.btn_clearAll.Click += new System.EventHandler(this.btn_clearAll_Click);
             // 
+            // textBox_exerciseDescription
+            // 
+            this.textBox_exerciseDescription.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.textBox_exerciseDescription.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_exerciseDescription.Location = new System.Drawing.Point(51, 154);
+            this.textBox_exerciseDescription.Name = "textBox_exerciseDescription";
+            this.textBox_exerciseDescription.Size = new System.Drawing.Size(328, 20);
+            this.textBox_exerciseDescription.TabIndex = 20;
+            // 
             // SetWorkoutControl
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.textBox_exerciseDescription);
             this.Controls.Add(this.btn_clearAll);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.comboBox_selectExercise);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.lvWorkout);
             this.Controls.Add(this.btnSaveWorkout);
@@ -273,7 +271,6 @@ namespace IntervalTimer
         private System.Windows.Forms.ColumnHeader colExercise;
         private System.Windows.Forms.ColumnHeader colDuration;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboBox_selectExercise;
         private System.Windows.Forms.NumericUpDown nud_restBetweenSets;
         private System.Windows.Forms.NumericUpDown nud_transitionBetweenReps;
         private System.Windows.Forms.NumericUpDown nud_numSets;
@@ -282,5 +279,6 @@ namespace IntervalTimer
         private System.Windows.Forms.Label label_numSets;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btn_clearAll;
+        private System.Windows.Forms.TextBox textBox_exerciseDescription;
     }
 }

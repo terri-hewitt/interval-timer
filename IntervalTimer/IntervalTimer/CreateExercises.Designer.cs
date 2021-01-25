@@ -57,9 +57,9 @@ namespace IntervalTimer
             // listBox_myExercises
             // 
             this.listBox_myExercises.FormattingEnabled = true;
-            this.listBox_myExercises.Location = new System.Drawing.Point(347, 68);
+            this.listBox_myExercises.Location = new System.Drawing.Point(350, 68);
             this.listBox_myExercises.Name = "listBox_myExercises";
-            this.listBox_myExercises.Size = new System.Drawing.Size(299, 394);
+            this.listBox_myExercises.Size = new System.Drawing.Size(299, 355);
             this.listBox_myExercises.TabIndex = 2;
             // 
             // label_myExercises
